@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>주민</title>
+    <script defer th:src="@{./assets/scripts/index.js}"></script>
+</head>
+<body>
+<h1>주민 관리</h1>
+<form id="form">
+    <label>
+        <span>이름</span>
+        <input autofocus required maxlength="10" minlength="2" placeholder="성/이름 (공백 없이)" name="name" type="text">
+    </label>
+    <label style="display: block">
+        <span>성별</span>
+        <select required name="gender">
+            <option value="M">남</option>
+            <option value="F">여</option>
+        </select>
+    </label>
+    <label style="display: block">
+        <span>주민등록번호</span>
+        <input required maxlength="6" minlength="6" placeholder="앞 자리 (숫자 여섯 자리)" name="first" type="text">
+        <input required maxlength="7" minlength="7" placeholder="뒷 자리 (숫자 일곱 자리)" name="last" type="text">
+    </label>
+    <label style="display: block">
+        <span>거주 시/도</span>
+        <select required name="region">
+            <option value="서울특별시">서울특별시</option>
+            <option value="부산광역시">부산광역시</option>
+            <option value="대구광역시">대구광역시</option>
+            <option value="인천광역시">인천광역시</option>
+            <option value="광주광역시">광주광역시</option>
+            <option value="대전광역시">대전광역시</option>
+            <option value="울산광역시">울산광역시</option>
+            <option value="세종특별자치시">세종특별자치시</option>
+            <option value="경기도">경기도</option>
+            <option value="강원특별자치도">강원특별자치도</option>
+            <option value="충청북도">충청북도</option>
+            <option value="충청남도">충청남도</option>
+            <option value="전북특별자치도">전북특별자치도</option>
+            <option value="전라남도">전라남도</option>
+            <option value="경상북도">경상북도</option>
+            <option value="경상남도">경상남도</option>
+            <option value="제주특별자치도">제주특별자치도</option>
+        </select>
+    </label>
+    <button type="submit">추가</button>
+</form>
+<table border="1" th:style="'margin-top: 0.5rem;'">
+    <tr>
+        <th rowspan="2">이름</th>
+        <th rowspan="2">성별</th>
+        <th colspan="2">주민등록번호</th>
+        <th rowspan="2">거주 시/도</th>
+    </tr>
+    <tr>
+        <th>앞 자리</th>
+        <th>뒷 자리</th>
+    </tr>
+    <tr th:each="personal : ${personals}">
+        <td th:text="${personal.getName()}"></td>
+        <td th:if="${personal.getGender().equals('M')}" th:text="남"></td>
+        <td th:if="${personal.getGender().equals('F')}" th:text="여"></td>
+        <td th:text="${personal.getSsnBirth()}"></td>
+        <td th:text="${personal.getSsnKey()}"></td>
+        <td th:text="${personal.getRegion()}"></td>
+    </tr>
+    <tr>
+        <th colspan="5">
+            <span th:if="${personals == null || personals.length == 0}"
+                  th:text="'검색 결과가 없습니다.'"
+                  th:style="${'font-weight: 400;'}">
+            </span>
+            <a th:if="${paging > 0 && search == null && personals.length > 0}"
+               th:each="paging : ${#numbers.sequence(vos.movableMinPage, vos.movableMaxPage)}"
+               th:text="${paging}"
+               th:href="@{'/personal/' (page = ${paging})}"
+               th:style="${'margin-left: 0.5rem; font-weight: 400;'}"></a>
+            <a th:if="${paging > 0 && search != null && personals.length > 0}"
+               th:each="paging : ${#numbers.sequence(vos.movableMinPage, vos.movableMaxPage)}"
+               th:text="${paging}"
+               th:href="@{'/personal/' (page = ${paging}, filter = ${filter}, search = ${search})}"
+               th:style="${'margin-left: 0.5rem; font-weight: 400;'}"></a>
+        </th>
+    </tr>
+</table>
+<form id="search-form" th:style="${'margin-top: 0.5rem;'}">
+    <label>
+        <select name="filter">
+            <option th:selected="${filter != null && filter.equals('name')}" value="name">이름</option>
+            <option th:selected="${filter != null && filter.equals('gender')}" value="gender">성별</option>
+            <option th:selected="${filter != null && filter.equals('ssn')}" value="ssn">주민등록번호</option>
+            <option th:selected="${filter != null && filter.equals('region')}" value="region">거주 시/도</option>
+        </select>
+    </label>
+    <label>
+        <input maxlength="50" minlength="0" name="search" type="text">
+    </label>
+    <button type="submit">검색</button>
+</form>
+</body>
+</html>
