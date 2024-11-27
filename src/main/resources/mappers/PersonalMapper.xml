@@ -32,16 +32,16 @@
         `region` AS `region`
         FROM `test0426`.`personals`
         <where>
-            <if test="filter.equals('name')">
+            <if test="filter != null and filter.equals('name')">
                 AND `name` LIKE CONCAT('%', #{search}, '%')
             </if>
-            <if test="filter.equals('gender')">
+            <if test="filter != null and filter.equals('gender')">
                 AND `gender` = #{search}
             </if>
-            <if test="filter.equals('ssn')">
+            <if test="filter != null and filter.equals('ssn')">
                 AND CONCAT(`ssn_birth`, `ssn_key`) LIKE CONCAT ('%', #{search}, '%')
             </if>
-            <if test="filter.equals('region')">
+            <if test="filter != null and filter.equals('region')">
                 AND `region` LIKE CONCAT('%', #{search}, '%')
             </if>
         </where>
@@ -52,16 +52,16 @@
         SELECT COUNT(0)
         FROM `test0426`.`personals`
         <where>
-            <if test="filter.equals('name')">
+            <if test="filter != null and filter.equals('name')">
                 AND `name` LIKE CONCAT('%', #{search}, '%')
             </if>
-            <if test="filter.equals('gender')">
+            <if test="filter != null and filter.equals('gender')">
                 AND `gender` = #{search}
             </if>
-            <if test="filter.equals('ssn')">
+            <if test="filter != null and filter.equals('ssn')">
                 AND CONCAT(`ssn_birth`, `ssn_key`) LIKE CONCAT('%', #{search}, '%')
             </if>
-            <if test="filter.equals('region')">
+            <if test="filter != null and filter.equals('region')">
                 AND `region` LIKE CONCAT('%', #{search}, '%')
             </if>
         </where>
